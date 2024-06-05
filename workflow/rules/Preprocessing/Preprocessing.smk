@@ -6,9 +6,9 @@ rule merge_files:
         forward_fastqs=lambda wildcards: sample_dict[wildcards.sample]["input_files"][::2],
         reverse_fastqs=lambda wildcards: sample_dict[wildcards.sample]["input_files"][1::2]
     output:
-        forward_fastq=out_dir_path/ ("data/merged_raw/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
+        forward_fastq=out_dir_path/ ("data/merged_raw/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
                                                                       config["data_type_description"]["fastq"]["output"]["extension"])),
-        reverse_fastq=out_dir_path/ ("data/merged_raw/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
+        reverse_fastq=out_dir_path/ ("data/merged_raw/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
                                                                       config["data_type_description"]["fastq"]["output"]["extension"])),
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fastqc.stats"
     log:

@@ -241,7 +241,7 @@ localrules: all
 results_list = []
 if config["pipeline_mode"] in ["qc"]:
 
-    results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}{suffix}_fastqc.zip",
+    results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
                             stage=["merged_raw"],
                             sample=sample_list,
                             suffix=[config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
