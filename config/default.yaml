@@ -269,11 +269,17 @@ report_type_list:
 "pipeline_mode": "qc"
 
 "data_type_description":
-  "fastq":
-    "suffix_list":
-      "forward":
-        - "_R1_001"
-      "reverse":
-        - "_R2_001"
-    "extension_list":
-      - ".fastq.gz"
+    "fastq":
+        "input":
+            "suffix_list":
+                "forward":
+                    - "_R1_001"
+                "reverse":
+                    - "_R2_001"
+            "extension_list":
+                - ".fastq.gz"
+        "output":
+            "suffix_list":
+                "forward": "_1"
+                "reverse": "_2"
+            "extension_list": ".fastq.gz"

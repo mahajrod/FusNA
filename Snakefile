@@ -4,10 +4,21 @@ from copy import deepcopy
 import pandas as pd
 from pathlib import Path
 
-input_rna_dir = Path(config["input_rna_dir"])
+#---- Include sections for functions ----
+include: "workflow/functions/general_parsing.py"
+#----------------------------------------
 
-sample_list = [element.name for element in input_rna_dir.glob("*")]
-print(sample_list)
+input_rna_dir_path = Path(config["input_rna_dir"])
+
+sample_list = [element.name for element in input_rna_dir_path.glob("*")]
+#pair_prefix_dict =
+
+input_filedict = {}
+for sample in sample_list:
+    input_filedict[sample] = find_files(input_rna_dir / sample,
+                                        extension_list=config["data_type_description"]["fastq"]["input"]["extension_list"])
+
+print(input_filedict )
 
 """
 def check_dna_index_presence(dna_reference_path):
