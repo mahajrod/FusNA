@@ -18,7 +18,7 @@ rule merge_files:
     benchmark:
         out_dir_path/ "benchmark/merge_files.{sample}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        "../../../%s" % config["conda_config"]
     resources:
         cpus=config["threads"]["merge_files"],
         time=config["time"]["merge_files"],
