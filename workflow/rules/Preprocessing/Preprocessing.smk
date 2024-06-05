@@ -23,6 +23,7 @@ rule merge_files:
         cpus=config["threads"]["merge_files"],
         time=config["time"]["merge_files"],
         mem=config["memory_mb"]["merge_files"],
+        io=1
     threads:
         config["threads"]["merge_files"]
     shell:

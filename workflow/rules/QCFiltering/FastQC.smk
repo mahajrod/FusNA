@@ -19,6 +19,7 @@ rule fastqc:
         cpus=config["threads"]["fastqc"],
         time=config["time"]["fastqc"],
         mem=config["memory_mb"]["fastqc"],
+        io=1
     threads:
         config["threads"]["fastqc"]
     shell:

@@ -39,7 +39,7 @@ for sample in sample_list:
 
 
 
-print(sample_dict)
+#print(sample_dict)
 
 """
 def check_dna_index_presence(dna_reference_path):
