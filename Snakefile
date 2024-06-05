@@ -9,6 +9,8 @@ include: "workflow/functions/general_parsing.py"
 #----------------------------------------
 
 input_rna_dir_path = Path(config["input_rna_dir"])
+out_dir_path = Path(config["out_dir"])
+
 
 sample_list = [element.name for element in input_rna_dir_path.glob("*")]
 
@@ -239,7 +241,12 @@ localrules: all
 results_list = []
 if config["pipeline_mode"] in ["qc"]:
 
-    results_list += []
+    results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}{suffix}_fastqc.zip",
+                            stage=["merged_raw"],
+                            sample=sample_list,
+                            suffix=[config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
+                                    config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]]),
+                     ]
 
 #---- Final rule ----
 rule all:
