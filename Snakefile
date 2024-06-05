@@ -206,7 +206,7 @@ if not rna_index_presence:
 #---- Functions ----
 #----
 localrules: all
-
+results_list = []
 if config["pipeline_mode"] in ["qc"]:
 
     results_list += []
