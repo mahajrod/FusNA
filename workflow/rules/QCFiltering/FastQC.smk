@@ -2,7 +2,7 @@
 
 rule fastqc:
     input:
-        fastq=out_dir_path/ "data/{stage}/{fastq_prefix}%s" % config["data_type_description"]["fastq"]["output"]["extension"],
+        fastq=out_dir_path/ ("data/{stage}/{fastq_prefix}%s" % config["data_type_description"]["fastq"]["output"]["extension"]),
     output:
         fastqc=out_dir_path/ "qc/fastqc/{stage}/{fastq_prefix}_fastqc.zip"
     params:
