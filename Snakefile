@@ -17,9 +17,18 @@ benchmark_dir_path =  out_dir_path / config["benchmark_dir"]
 cluster_log_dir_path = out_dir_path / config["cluster_log_dir"]
 
 #---- Parsing reference files ----
-reference_list = [element.name for element in reference_dir_path.glob("*")]
+reference_list = []
+tmp_reference_list = sorted(reference_dir_path.glob("*"))
+for element in tmp_reference_list:
+    if element.is_dir():
+        reference_list.append(element.name)
+
+tmp_list = []
+
+
 reference_dict = {}
 print(reference_list)
+
 for reference in reference_list:
     reference_dict[reference] = {
                                  "fasta": None,
