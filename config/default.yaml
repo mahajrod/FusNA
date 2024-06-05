@@ -43,7 +43,7 @@ cluster_log_dir: "cluster_logs"
   "merge_files": 1000
   "fastqc": 8000
   "cutadapt": 10000
-  "STAR": 15000
+  "STAR": 40000
   "arriba": 15000
 
 per_thread_sort_mem: 10 # memory in gigabytes
@@ -70,6 +70,12 @@ mosdepth:
 #---- Report ----
 report_type_list:
   - "full"
+
+#---- Tool selection ----
+"aligner_list":
+  - "STAR"
+"fusion_caller_list":
+  - "arriba"
 
 #---- Pipeline modes ----
 

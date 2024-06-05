@@ -316,9 +316,18 @@ if config["pipeline_mode"] in ["filtering", "alignment"]:
                      ]
 
 if config["pipeline_mode"] in ["alignment"]:
-    results_list += [expand(out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.unsorted.bam",
+    results_list += [expand(out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.unsorted.bam",
                             sample=sample_list,
+                            aligner=config["aligner_list"],
                             reference=reference_list)]
+
+if config["pipeline_mode"] in ["fusion_call"]:
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.tsv",
+                            sample=sample_list,
+                            aligner=["STAR"],
+                            reference=reference_list,
+                            fusion_caller=config["fusion_caller_list"])]
+
 #---- Final rule ----
 rule all:
     input:
@@ -328,27 +337,4 @@ include: "workflow/rules/Preprocessing/Preprocessing.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/Alignment/STAR.smk"
-"""
-if pipeline_mode in ["index", "index_rna", "index_dna"]:
-    include: "workflow/rules/Preprocessing/Reference.smk"
-else:
-    include: "workflow/rules/Preprocessing/Target.smk"
-    include: "workflow/rules/Preprocessing/AnnotationSources.smk"
-    include: "workflow/rules/BaseCall/BaseCall.smk"
-    include: "workflow/rules/QCFiltering/Cutadapt.smk"
-    include: "workflow/rules/QCFiltering/FastQC.smk"
-    if config["umi_type"] == "UMI_UDI":
-        include: "workflow/rules/Alignment/ConsensusCall/UMI_UDI.smk"
-    elif config["umi_type"] == "UMI_duplex":
-        include: "workflow/rules/Alignment/ConsensusCall/UMI_duplex.smk"
-    include: "workflow/rules/Alignment/ConsensusCall/Common.smk"
-    include: "workflow/rules/Alignment/RawReads.smk"
-    include: "workflow/rules/VariantCall/Pisces.smk"
-    include: "workflow/rules/VariantCall/Mutect2.smk"
-    include: "workflow/rules/VariantCall/PanelOfNormals.smk"
-    include: "workflow/rules/Alignment/CountReads.smk"
-    include: "workflow/rules/Annotation/Filter.smk"
-    include: "workflow/rules/Annotation/SnpEff.smk"
-    include:  "workflow/rules/Stats/CollectStats.smk"
-"""
-
+include: "workflow/rules/FusionCall/Arriba.smk"
