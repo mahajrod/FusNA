@@ -6,13 +6,11 @@ channels:
   - anaconda
 dependencies:
   - python>=3.8
+  - arriba=2.4.0
   #- bcl2fastq=2.19
-  - fastqc>=0.11
-  - cutadapt=3.4
-  #- bwa=0.7.17
+  #- fastqc>=0.11
   #- bowtie2=2.4
   #- samtools>=1.10
-  #- mosdepth>=0.3.1
   #- gatk4=4.2.0.0
   #- picard>=2.5
   #- numpy>=1.10

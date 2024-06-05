@@ -24,7 +24,10 @@ for reference in reference_list:
     reference_dict[reference] = {
                                  "fasta": None,
                                  "STAR_index": None,
-                                 "annotation": None
+                                 "annotation": None,
+                                 "blacklist": None,
+                                 "know_fusions": None,
+                                 "protein domains": None
                                  }
     reference_fasta_list = []
     for extension in config["data_type_description"]["fasta"]["input"]["extension_list"]:
@@ -42,11 +45,19 @@ for reference in reference_list:
 
     reference_dict[reference]["annotation"] = annotation_list[0]
 
-    STAR_index_list = sorted((reference_dir_path / reference).glob(f"STAR_index*"))
-    if len(STAR_index_list) != 1:
-        raise ValueError(f"ERROR!!! Found noone or more than STAR index for reference {reference}!")
+    for data, file_prefix in zip(["STAR_index", "blacklist", "know_fusions", "protein_domains"],
+                                 ["STAR_index", "blacklist", "know_fusions", "protein_domains"]):
 
-    reference_dict[reference]["STAR_index"] = STAR_index_list[0]
+        file_list = sorted((reference_dir_path / reference).glob(f"{file_prefix}*"))
+        if len(file_list) != 1:
+            if data in ("STAR_index", "blacklist"):
+                raise ValueError(f"ERROR!!! Found noone or more than {data} for reference {reference}!")
+            else:
+                print(f"ERROR!!! Found noone or more than {data} for reference! Ignoring all these files...")
+                file_list = None
+        reference_dict[reference][data] = None if file_list is None else file_list[0]
+
+        print(reference_dict)
 
 #----
 

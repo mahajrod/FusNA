@@ -16,7 +16,7 @@ rule arriba:
     benchmark:
         benchmark_dir_path / "{sample}/arriba.{sample}.{alignment_tool}.{reference}.benchmark.txt"
     conda:
-        "../../../%s" % config["conda_config"]
+        "../../../%s" % config["arriba_config"]
     resources:
         cpus=config["threads"]["arriba"],
         time=config["time"]["arriba"],

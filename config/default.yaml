@@ -27,6 +27,7 @@ cluster_log_dir: "cluster_logs"
 
 #---- Conda ----
 "conda_config": "workflow/envs/conda.yaml"
+"arriba_config": "workflow/envs/arriba.yaml"
 #----
 
 #---- Tool threads ----
