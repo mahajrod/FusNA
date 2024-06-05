@@ -13,7 +13,7 @@ rule STAR:
         cluster_log=cluster_log_dir_path / "{sample}/STAR.{sample}.{reference}.cluster.log",
         cluster_err=cluster_log_dir_path / "{sample}/STAR.{sample}.{reference}.cluster.err"
     benchmark:
-        benchmark_dir_path / "{sample}/STAR.{sample}.{reference},benchmark.txt"
+        benchmark_dir_path / "{sample}/STAR.{sample}.{reference}.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
