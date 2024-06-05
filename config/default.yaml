@@ -9,8 +9,8 @@
 #-------- Annotation --------
 
 #---- Input ----
-input_rna_dir: "input/RNA"
-"reference_dir": "input/reference"
+input_rna_dir: "input/RNA/"
+"reference_dir": "resources/reference/"
 #----
 
 #----
