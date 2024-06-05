@@ -31,4 +31,4 @@ rule arriba:
         " arriba -x {input.bam} -o {output.fusions} -O {output.fusions_discarded} "
         " -a {input.reference_fasta} -g {input.reference_annotation} "
         " -b {input.blacklist} -k {input.known_fusions} -t {input.known_fusions} "
-        " -p {input.protein_domains} 2>{log.std} "
+        " -p {input.protein_domains} >{log.std} 2>&1; "
