@@ -33,13 +33,15 @@ input_rna_dir: "input/RNA"
 "threads":
   "merge_files": 1
   "fastqc": 1
+  "cutadapt": 5
+
 
   merge_reference: 1
   ref_faidx: 1
   ref_dict: 1
   bwa_index: 1
   bowtie2_index: 1
-  cutadapt: 5
+
   bwa: 25
   bowtie2: 8
   sort: 2
@@ -105,6 +107,7 @@ input_rna_dir: "input/RNA"
 "memory_mb":
   "merge_files": 1000
   "fastqc": 8000
+  "cutadapt": 10000
 
   merge_reference: 1000
   ref_faidx: 1000
@@ -112,7 +115,7 @@ input_rna_dir: "input/RNA"
   bwa_index: 10000
 
   trimmomatic: 10000
-  cutadapt: 10000
+
   index: 10000
   bwa: 10000
   bowtie2: 10000
@@ -181,6 +184,7 @@ per_thread_sort_mem: 10 # memory in gigabytes
 time:
   "merge_files": "00:15:00"
   "fastqc": "02:00:00"
+  "cutadapt": "02:00:00"
 
   merge_reference: "01:00:00"
   ref_faidx: "00:30:00"
@@ -188,7 +192,7 @@ time:
   bwa_index: "10:00:00"
 
   trimmomatic: "10:00:00"
-  cutadapt: "02:00:00"
+
   index: "10:00:00"
   bwa_map: "05:00:00"
   bowtie2_rna_map: "05:00:00"
@@ -269,7 +273,7 @@ report_type_list:
 #---- Pipeline modes ----
 
 "starting_point": "fastq"
-"pipeline_mode": "qc"
+"pipeline_mode": "filtering"
 
 "data_type_description":
     "fastq":

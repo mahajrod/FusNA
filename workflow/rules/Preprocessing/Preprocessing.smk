@@ -12,11 +12,11 @@ rule merge_files:
                                                                       config["data_type_description"]["fastq"]["output"]["extension"])),
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fastqc.stats"
     log:
-        std=out_dir_path/ "log/merge_files.{sample}.log",
-        cluster_log=out_dir_path/ "cluster_log/merge_files.{sample}.cluster.log",
-        cluster_err=out_dir_path/ "cluster_err/merge_files.{sample}.cluster.err"
+        std=log_dir_path / "{sample}/merge_files.{sample}.log",
+        cluster_log=cluster_log_dir_path / "{sample}/merge_files.{sample}.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/merge_files.{sample}.cluster.err"
     benchmark:
-        out_dir_path/ "benchmark/merge_files.{sample}.benchmark.txt"
+        benchmark_dir_path / "{sample}/merge_files.{sample}.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:

@@ -239,7 +239,7 @@ if not rna_index_presence:
 #----
 localrules: all
 results_list = []
-if config["pipeline_mode"] in ["qc"]:
+if config["pipeline_mode"] in ["qc", "filtering"]:
 
     results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
                             stage=["merged_raw"],
@@ -248,6 +248,10 @@ if config["pipeline_mode"] in ["qc"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]]),
                      ]
 
+if config["pipeline_mode"] in ["filtering"]:
+    results_list += [expand(out_dir_path/ "data/filtered/{sample}/{sample}.stats",
+                            sample=sample_list)]
+
 #---- Final rule ----
 rule all:
     input:
@@ -255,7 +259,7 @@ rule all:
 
 include: "workflow/rules/Preprocessing/Preprocessing.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
-
+include: "workflow/rules/QCFiltering/Cutadapt.smk"
 """
 if pipeline_mode in ["index", "index_rna", "index_dna"]:
     include: "workflow/rules/Preprocessing/Reference.smk"
