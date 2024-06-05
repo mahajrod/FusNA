@@ -15,7 +15,7 @@ sample_list = [element.name for element in input_rna_dir_path.glob("*")]
 
 input_filedict = {}
 for sample in sample_list:
-    input_filedict[sample] = find_files(input_rna_dir / sample,
+    input_filedict[sample] = find_files(input_rna_dir_path / sample,
                                         extension_list=config["data_type_description"]["fastq"]["input"]["extension_list"])
 
 print(input_filedict )
