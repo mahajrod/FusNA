@@ -6,7 +6,7 @@ from pathlib import Path
 
 input_rna_dir = Path(config["input_rna_dir"])
 
-sample_list = list(input_rna_dir.glob("*"))
+sample_list = [element.name for element in input_rna_dir.glob("*")]
 print(sample_list)
 
 """
