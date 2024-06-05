@@ -3,8 +3,8 @@
 rule STAR:
     input:
         #fastq_dir=rules.create_fastq_links.output,
-        forward_fastqs=rules.cutadapt.output.forward_fastq,
-        reverse_fastqs=rules.cutadapt.output.reverse_fastq,
+        forward_fastq=rules.cutadapt.output.forward_fastq,
+        reverse_fastq=rules.cutadapt.output.reverse_fastq,
         genome_dir=lambda wildcards: reference_dict[wildcards.reference]["STAR_index"]
     output:
         unsorted_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.unsorted.bam",
@@ -24,10 +24,17 @@ rule STAR:
     threads:
         config["threads"]["STAR"]
     shell:
-        " STAR --runThreadN {threads} --genomeDir {input.genome_dir} --genomeLoad NoSharedMemory "
-        " --readFilesIn {input.forward_fastqs} {input.reverse_fastqs} --readFilesCommand zcat "
+        " OUT_DIR=`dirname {output.unsorted_bam}`; "
+        " LOG=`realpath {log.std}`; "
+        " GENOME_DIR=`realpath {input.genome_dir}`; "
+        " FORWARD_FASTQ=`realpath {input.forward_fastq}`; "
+        " REVERSE_FASTQ=`realpath {input.reverse_fastq}`; "
+        " BAM=`basename {output.unsorted_bam}`; "
+        " cd ${{OUT_DIR}}; "
+        " STAR --runThreadN {threads} --genomeDir ${{GENOME_DIR}} --genomeLoad NoSharedMemory "
+        " --readFilesIn ${{FORWARD_FASTQ}} ${{REVERSE_FASTQ}} --readFilesCommand zcat "
         " --outStd BAM_Unsorted --outSAMtype BAM Unsorted --outSAMunmapped Within --outBAMcompression 0 "
         " --outFilterMultimapNmax 50 --peOverlapNbasesMin 10 --alignSplicedMateMapLminOverLmate 0.5 "
         " --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentMin 10 --chimOutType WithinBAM HardClip "
         " --chimJunctionOverhangMin 10 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 "
-        " --chimScoreSeparation 1 --chimSegmentReadGapMax 3 --chimMultimapNmax 50  > {output.unsorted_bam} 2>{log.std} "
+        " --chimScoreSeparation 1 --chimSegmentReadGapMax 3 --chimMultimapNmax 50  > ${{BAM}} 2>${{LOG}} "
