@@ -10,6 +10,10 @@ include: "workflow/functions/general_parsing.py"
 
 input_rna_dir_path = Path(config["input_rna_dir"])
 out_dir_path = Path(config["out_dir"])
+log_dir_path = out_dir_path / config["log_dir"]
+error_dir_path  = out_dir_path / config["error_dir"]
+benchmark_dir_path =  out_dir_path / config["benchmark_dir"]
+cluster_log_dir_path = out_dir_path / config["cluster_log_dir"]
 
 
 sample_list = [element.name for element in input_rna_dir_path.glob("*")]

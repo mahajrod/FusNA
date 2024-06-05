@@ -17,10 +17,10 @@ input_rna_dir: "input/RNA"
 #---- Output directory and subdirectories ----
 "out_dir": "results/"
 #--------- Subdirectories --------
-#log_dir: "logs"
-#error_dir: "errors"
-#benchmark_dir: "benchmarks"
-#cluster_log_dir: "cluster_logs"
+log_dir: "logs"
+error_dir: "errors"
+benchmark_dir: "benchmarks"
+cluster_log_dir: "cluster_logs"
 
 "qc_dir": "qc/"
 #--------
