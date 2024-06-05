@@ -295,8 +295,10 @@ if not rna_index_presence:
 #---- Functions ----
 #----
 localrules: all
+
+
 results_list = []
-if config["pipeline_mode"] in ["qc", "filtering", "alignment"]:
+if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call"]:
 
     results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
                             stage=["merged_raw"],
@@ -305,7 +307,7 @@ if config["pipeline_mode"] in ["qc", "filtering", "alignment"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]]),
                      ]
 
-if config["pipeline_mode"] in ["filtering", "alignment"]:
+if config["pipeline_mode"] in ["filtering", "alignment", "fusion_call"]:
     results_list += [expand(out_dir_path/ "data/filtered/{sample}/{sample}.stats",
                             sample=sample_list),
                      expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
@@ -315,7 +317,7 @@ if config["pipeline_mode"] in ["filtering", "alignment"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]])
                      ]
 
-if config["pipeline_mode"] in ["alignment"]:
+if config["pipeline_mode"] in ["alignment", "fusion_call"]:
     results_list += [expand(out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.unsorted.bam",
                             sample=sample_list,
                             aligner=config["aligner_list"],

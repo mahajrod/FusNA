@@ -80,7 +80,7 @@ report_type_list:
 #---- Pipeline modes ----
 
 #"starting_point": "fastq"
-"pipeline_mode": "alignment"
+"pipeline_mode": "fusion_call"
 
 "data_type_description":
     "fastq":
