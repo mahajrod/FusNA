@@ -7,7 +7,7 @@ rule STAR:
         reverse_fastqs=rules.cutadapt.output.reverse_fastq,
         genome_dir=lambda wildcards: reference_dict[wildcards.reference]["STAR_index"]
     output:
-        unsorted_bam=out_dir_path/ "alignment/STAR/{reference}{sample}/{sample}.unsorted.bam",
+        unsorted_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.unsorted.bam",
     log:
         std=log_dir_path / "{sample}/STAR.{sample}.{reference}.log",
         cluster_log=cluster_log_dir_path / "{sample}/STAR.{sample}.{reference}.cluster.log",

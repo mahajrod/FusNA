@@ -27,7 +27,6 @@ tmp_list = []
 
 
 reference_dict = {}
-print(reference_list)
 
 for reference in reference_list:
     reference_dict[reference] = {
@@ -66,7 +65,7 @@ for reference in reference_list:
                 file_list = None
         reference_dict[reference][data] = None if file_list is None else file_list[0]
 
-    print(reference_dict)
+print(reference_dict)
 
 #----
 
