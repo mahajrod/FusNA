@@ -25,6 +25,10 @@ input_rna_dir: "input/RNA"
 "qc_dir": "qc/"
 #--------
 
+#---- Conda ----
+"conda_config": "workflow/envs/conda.yaml"
+#----
+
 #---- Tool threads ----
 "threads":
   "merge_files": 1
