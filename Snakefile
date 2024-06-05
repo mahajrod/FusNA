@@ -19,7 +19,7 @@ cluster_log_dir_path = out_dir_path / config["cluster_log_dir"]
 #---- Parsing reference files ----
 reference_list = [element.name for element in reference_dir_path.glob("*")]
 reference_dict = {}
-print("AAAAAA")
+print(reference_list)
 for reference in reference_list:
     reference_dict[reference] = {
                                  "fasta": None,
