@@ -254,7 +254,13 @@ if config["pipeline_mode"] in ["qc", "filtering"]:
 
 if config["pipeline_mode"] in ["filtering"]:
     results_list += [expand(out_dir_path/ "data/filtered/{sample}/{sample}.stats",
-                            sample=sample_list)]
+                            sample=sample_list),
+                     expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
+                            stage=["filtered"],
+                            sample=sample_list,
+                            suffix=[config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
+                                    config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]])
+                     ]
 
 #---- Final rule ----
 rule all:
