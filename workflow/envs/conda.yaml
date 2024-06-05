@@ -8,6 +8,7 @@ channels:
   - anaconda
 dependencies:
   - python>=3.8
+  - arriba=2.4.0
   #- bcl2fastq=2.19
   - fastqc>=0.11
   - cutadapt=3.4

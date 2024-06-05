@@ -9,17 +9,51 @@ include: "workflow/functions/general_parsing.py"
 #----------------------------------------
 
 input_rna_dir_path = Path(config["input_rna_dir"])
+reference_dir_path = Path(config["reference_dir"])
 out_dir_path = Path(config["out_dir"])
 log_dir_path = out_dir_path / config["log_dir"]
 error_dir_path  = out_dir_path / config["error_dir"]
 benchmark_dir_path =  out_dir_path / config["benchmark_dir"]
 cluster_log_dir_path = out_dir_path / config["cluster_log_dir"]
 
+#---- Parsing reference files ----
+reference_list = [element.name for element in reference_dir_path.glob("*")]
+reference_dict = {}
 
+for reference in reference_list:
+    reference_dict[reference] = {
+                                 "fasta": None,
+                                 "STAR_index": None,
+                                 "annotation": None
+                                 }
+    reference_fasta_list = []
+    for extension in config["data_type_description"]["fasta"]["input"]["extension_list"]:
+        reference_fasta_list += sorted((reference_dir_path / reference).glob(f"*{extension}"))
+    if len(reference_fasta_list) != 1:
+        raise ValueError(f"ERROR!!! Found noone or more than one fasta file for reference {reference}!")
+
+    reference_dict[reference]["fasta"] = reference_fasta_list[0]
+
+    annotation_list = []
+    for extension in config["data_type_description"]["gtf"]["input"]["extension_list"]:
+        annotation_list += sorted((reference_dir_path / reference).glob(f"*{extension}"))
+    if len(annotation_list) != 1:
+        raise ValueError(f"ERROR!!! Found noone or more than one gtf file for reference {reference}!")
+
+    reference_dict[reference]["annotation"] = annotation_list[0]
+
+    STAR_index_list = sorted((reference_dir_path / reference).glob(f"STAR_index*"))
+    if len(STAR_index_list) != 1:
+        raise ValueError(f"ERROR!!! Found noone or more than STAR index for reference {reference}!")
+
+    reference_dict[reference]["STAR_index"] = STAR_index_list[0]
+
+#----
+
+#---- Parsing samples ----
 sample_list = [element.name for element in input_rna_dir_path.glob("*")]
 
 sample_dict = {}
-
 for sample in sample_list:
     sample_dict[sample] = {
                            "input_files": [],
@@ -40,7 +74,7 @@ for sample in sample_list:
             raise ValueError("ERROR!!! Forward and reverse read files differs by more than one symbol:\n\t{0}\n\t{1}".format(str(forward),
                                                                                                                              str(reverse)))
         sample_dict[sample]["input_pair_prefixes"].append(get_pair_prefix(str(forward), str(reverse)))
-
+#----
 
 
 #print(sample_dict)
@@ -243,7 +277,7 @@ if not rna_index_presence:
 #----
 localrules: all
 results_list = []
-if config["pipeline_mode"] in ["qc", "filtering"]:
+if config["pipeline_mode"] in ["qc", "filtering", "alignment"]:
 
     results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
                             stage=["merged_raw"],
@@ -252,7 +286,7 @@ if config["pipeline_mode"] in ["qc", "filtering"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]]),
                      ]
 
-if config["pipeline_mode"] in ["filtering"]:
+if config["pipeline_mode"] in ["filtering", "alignment"]:
     results_list += [expand(out_dir_path/ "data/filtered/{sample}/{sample}.stats",
                             sample=sample_list),
                      expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
@@ -262,6 +296,10 @@ if config["pipeline_mode"] in ["filtering"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]])
                      ]
 
+if config["pipeline_mode"] in ["alignment"]:
+    results_list += [expand(out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.unsorted.bam",
+                            sample=sample_list,
+                            reference=reference_list)]
 #---- Final rule ----
 rule all:
     input:
@@ -270,6 +308,7 @@ rule all:
 include: "workflow/rules/Preprocessing/Preprocessing.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
+include: "workflow/rules/Alignment/STAR.smk"
 """
 if pipeline_mode in ["index", "index_rna", "index_dna"]:
     include: "workflow/rules/Preprocessing/Reference.smk"
