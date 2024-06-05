@@ -11,14 +11,33 @@ include: "workflow/functions/general_parsing.py"
 input_rna_dir_path = Path(config["input_rna_dir"])
 
 sample_list = [element.name for element in input_rna_dir_path.glob("*")]
-#pair_prefix_dict =
 
-input_filedict = {}
+sample_dict = {}
+
 for sample in sample_list:
-    input_filedict[sample] = find_files(input_rna_dir_path / sample,
-                                        extension_list=config["data_type_description"]["fastq"]["input"]["extension_list"])
+    sample_dict[sample] = {
+                           "input_files": [],
+                           "input_pair_prefixes": []
+                           }
+    sample_dict[sample]["input_files"] = find_files(input_rna_dir_path / sample,
+                                                    extension_list=config["data_type_description"]["fastq"]["input"]["extension_list"])
 
-print(input_filedict )
+    if (len(sample_dict[sample]["input_files"]) % 2) != 0:
+        raise ValueError("ERROR!!! {0} fastq files seems to be unpaired or misrecognized".format(sample))
+
+    if len(sample_dict[sample]["input_files"]) == 0:
+        raise ValueError("ERRRR!!! {0} has no fastq files".format(sample))
+
+    sample_dict[sample]["input_pair_prefixes"] = []
+    for forward, reverse in zip(sample_dict[sample]["input_files"][::2], sample_dict[sample]["input_files"][1::2]):
+        if p_distance(str(forward), str(reverse), len(str(forward))) > 1:
+            raise ValueError("ERROR!!! Forward and reverse read files differs by more than one symbol:\n\t{0}\n\t{1}".format(str(forward),
+                                                                                                                             str(reverse)))
+        sample_dict[sample]["input_pair_prefixes"].append(get_pair_prefix(str(forward), str(reverse)))
+
+
+
+print(sample_dict)
 
 """
 def check_dna_index_presence(dna_reference_path):
