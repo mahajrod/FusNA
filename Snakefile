@@ -35,8 +35,8 @@ for reference in reference_list:
                                  "STAR_index": None,
                                  "annotation": None,
                                  "blacklist": None,
-                                 "know_fusions": None,
-                                 "protein domains": None
+                                 "known_fusions": None,
+                                 "protein_domains": None
                                  }
     reference_fasta_list = []
     for extension in config["data_type_description"]["fasta"]["input"]["extension_list"]:
@@ -54,8 +54,8 @@ for reference in reference_list:
 
     reference_dict[reference]["annotation"] = annotation_list[0]
 
-    for data, file_prefix in zip(["STAR_index", "blacklist", "know_fusions", "protein_domains"],
-                                 ["STAR_index", "blacklist", "know_fusions", "protein_domains"]):
+    for data, file_prefix in zip(["STAR_index", "blacklist", "known_fusions", "protein_domains"],
+                                 ["STAR_index", "blacklist", "known_fusions", "protein_domains"]):
 
         file_list = sorted((reference_dir_path / reference).glob(f"{file_prefix}*"))
         if len(file_list) != 1:
