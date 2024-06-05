@@ -253,6 +253,8 @@ rule all:
     input:
         results_list
 
+include: "workflow/rules/Preprocessing/Preprocessing.smk"
+include: "workflow/rules/QCFiltering/FastQC.smk"
 
 """
 if pipeline_mode in ["index", "index_rna", "index_dna"]:
