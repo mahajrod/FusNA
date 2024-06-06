@@ -61,7 +61,7 @@ rule add_sample_id:
 rule combine_arriba_fusion_files:
     input:
         fusions=expand(out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.labeled.tsv",
-                       sample=sample_list),
+                       sample=sample_list, allow_missing=True),
     output:
         fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/all_samples.fusions.labeled.tsv",
     log:
