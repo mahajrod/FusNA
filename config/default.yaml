@@ -37,6 +37,7 @@ cluster_log_dir: "cluster_logs"
   "cutadapt": 5
   "STAR": 5
   "arriba": 4
+  "add_sample_id": 1
 
 #---- Tool memory ---- #TODO: adjust memory requirements
 "memory_mb":
@@ -45,6 +46,7 @@ cluster_log_dir: "cluster_logs"
   "cutadapt": 10000
   "STAR": 40000
   "arriba": 15000
+  "add_sample_id": 500
 
 per_thread_sort_mem: 10 # memory in gigabytes
 
@@ -55,6 +57,7 @@ time:
   "cutadapt": "02:00:00"
   "STAR": "05:00:00"
   "arriba": "05:00:00"
+  "add_sample_id": "00:10:00"
 
 #---- Tool variables ----
 
