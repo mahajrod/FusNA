@@ -38,7 +38,7 @@ cluster_log_dir: "cluster_logs"
   "STAR": 5
   "arriba": 4
   "add_sample_id": 1
-
+  "combine_arriba_fusion_files": 1
 #---- Tool memory ---- #TODO: adjust memory requirements
 "memory_mb":
   "merge_files": 1000
@@ -47,7 +47,7 @@ cluster_log_dir: "cluster_logs"
   "STAR": 40000
   "arriba": 15000
   "add_sample_id": 500
-
+  "combine_arriba_fusion_files": 500
 per_thread_sort_mem: 10 # memory in gigabytes
 
 #---- Tool time ----
@@ -58,7 +58,7 @@ time:
   "STAR": "05:00:00"
   "arriba": "05:00:00"
   "add_sample_id": "00:10:00"
-
+  "combine_arriba_fusion_files": "00:10:00"
 #---- Tool variables ----
 
 
