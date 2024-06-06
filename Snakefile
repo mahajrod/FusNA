@@ -328,7 +328,12 @@ if config["pipeline_mode"] in ["fusion_call"]:
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
-                            fusion_caller=config["fusion_caller_list"])]
+                            fusion_caller=config["fusion_caller_list"]),
+                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.fusions.labeled.tsv",
+                            aligner=["STAR"],
+                            reference=reference_list,
+                            fusion_caller=config["fusion_caller_list"])
+                     ]
 
 #---- Final rule ----
 rule all:

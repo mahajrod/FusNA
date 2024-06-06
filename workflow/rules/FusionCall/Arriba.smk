@@ -57,3 +57,32 @@ rule add_sample_id:
     shell:
         " workflow/scripts/add_sample_and_fusion_ids.py -i {input.fusions} -s {wildcards.sample}"
         "  -o {output.fusions} > {log.std} 2>&1; "
+
+rule combine_arriba_fusion_files:
+    input:
+        fusions=expand(out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.labeled.tsv",
+                       sample=sample_list),
+    output:
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/all_samples.fusions.labeled.tsv",
+    log:
+        std=log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.log",
+        cluster_log=cluster_log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.cluster.log",
+        cluster_err=cluster_log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.cluster.err"
+    benchmark:
+        benchmark_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.benchmark.txt"
+    conda:
+        "../../../%s" % config["conda_config"]
+    resources:
+        cpus=config["threads"]["combine_arriba_fusion_files"],
+        time=config["time"]["combine_arriba_fusion_files"],
+        mem=config["memory_mb"]["combine_arriba_fusion_files"],
+        io=1
+    threads:
+        config["threads"]["combine_arriba_fusion_files"]
+    shell:
+        " FUSION_FILE_ARRAY=({input.fusions}); "
+        " head -n 1 ${{FUSION_FILE_ARRAY[0]}} > {output.fusions} 2>{log.std}; "
+        " for FILE in ${{FUSION_FILE_ARRAY[@]}}; "
+        "   do "
+        "   tail -n +2 ${{FILE}} >> {output.fusions} 2>>{log.std}; "
+        "   done "
