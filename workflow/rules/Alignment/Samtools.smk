@@ -41,4 +41,5 @@ rule sort_bam:
     threads: config["threads"]["sort_bam"]
     shell:
         " TMP_PREFIX=`basename {output.bam}`'.sort_tmp'; "
-        " samtools sort -T ${{TMP_PREFIX}} -@ {threads} -m {params.per_thread_sort_mem} -o {output.bam} {input.bam} > {log.std} 2>&1; "
+        " samtools sort -T ${{TMP_PREFIX}} -@ {threads} -m {params.per_thread_sort_mem} "
+        " -o {output.bam} {input.bam} > {log.std} 2>&1; "
