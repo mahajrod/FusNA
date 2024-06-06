@@ -35,7 +35,8 @@ for reference in reference_list:
                                  "annotation": None,
                                  "blacklist": None,
                                  "known_fusions": None,
-                                 "protein_domains": None
+                                 "protein_domains": None,
+                                 "cytobands": None,
                                  }
     reference_fasta_list = []
     for extension in config["data_type_description"]["fasta"]["input"]["extension_list"]:
@@ -53,8 +54,8 @@ for reference in reference_list:
 
     reference_dict[reference]["annotation"] = annotation_list[0]
 
-    for data, file_prefix in zip(["STAR_index", "blacklist", "known_fusions", "protein_domains"],
-                                 ["STAR_index", "blacklist", "known_fusions", "protein_domains"]):
+    for data, file_prefix in zip(["STAR_index", "blacklist", "known_fusions", "protein_domains", "cytobands"],
+                                 ["STAR_index", "blacklist", "known_fusions", "protein_domains", "cytobands"]):
 
         file_list = sorted((reference_dir_path / reference).glob(f"{file_prefix}*"))
         if len(file_list) != 1:
@@ -298,7 +299,7 @@ localrules: all
 
 
 results_list = []
-if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call"]:
+if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call", "visualization"]:
 
     results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
                             stage=["merged_raw"],
@@ -307,7 +308,7 @@ if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]]),
                      ]
 
-if config["pipeline_mode"] in ["filtering", "alignment", "fusion_call"]:
+if config["pipeline_mode"] in ["filtering", "alignment", "fusion_call", "visualization"]:
     results_list += [expand(out_dir_path/ "data/filtered/{sample}/{sample}.stats",
                             sample=sample_list),
                      expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
@@ -317,13 +318,13 @@ if config["pipeline_mode"] in ["filtering", "alignment", "fusion_call"]:
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]])
                      ]
 
-if config["pipeline_mode"] in ["alignment", "fusion_call"]:
-    results_list += [expand(out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.unsorted.bam",
+if config["pipeline_mode"] in ["alignment", "fusion_call", "visualization"]:
+    results_list += [expand(out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.sorted.bam.bai",
                             sample=sample_list,
                             aligner=config["aligner_list"],
                             reference=reference_list)]
 
-if config["pipeline_mode"] in ["fusion_call"]:
+if config["pipeline_mode"] in ["fusion_call", "visualization"]:
     results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.labeled.tsv",
                             sample=sample_list,
                             aligner=["STAR"],
@@ -333,6 +334,13 @@ if config["pipeline_mode"] in ["fusion_call"]:
                             aligner=["STAR"],
                             reference=reference_list,
                             fusion_caller=config["fusion_caller_list"])
+                     ]
+if config["pipeline_mode"] in ["visualization"]:
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.pdf",
+                            sample=sample_list,
+                            aligner=["STAR"],
+                            reference=reference_list,
+                            fusion_caller=config["fusion_caller_list"]),
                      ]
 
 #---- Final rule ----
@@ -344,4 +352,5 @@ include: "workflow/rules/Preprocessing/Preprocessing.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/Alignment/STAR.smk"
+include: "workflow/rules/Alignment/Samtools.smk"
 include: "workflow/rules/FusionCall/Arriba.smk"

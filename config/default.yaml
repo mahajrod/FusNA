@@ -39,6 +39,9 @@ cluster_log_dir: "cluster_logs"
   "arriba": 4
   "add_sample_id": 1
   "combine_arriba_fusion_files": 1
+  "samtools_index": 2
+  "sort_bam": 5
+  "visualization" : 2
 #---- Tool memory ---- #TODO: adjust memory requirements
 "memory_mb":
   "merge_files": 1000
@@ -48,6 +51,10 @@ cluster_log_dir: "cluster_logs"
   "arriba": 15000
   "add_sample_id": 500
   "combine_arriba_fusion_files": 500
+  "samtools_index": 3000
+  "sort_bam_per_thread": 3000
+  "visualization": 10000
+
 per_thread_sort_mem: 10 # memory in gigabytes
 
 #---- Tool time ----
@@ -59,6 +66,9 @@ time:
   "arriba": "05:00:00"
   "add_sample_id": "00:10:00"
   "combine_arriba_fusion_files": "00:10:00"
+  "samtools_index": "02:00:00"
+  "sort_bam": "02:00:00"
+  "visualization": "02:00:00"
 #---- Tool variables ----
 
 
@@ -83,7 +93,7 @@ report_type_list:
 #---- Pipeline modes ----
 
 #"starting_point": "fastq"
-"pipeline_mode": "fusion_call"
+"pipeline_mode": "visualization" # Allowed: "qc", "filtering", "alignment", "fusion_call", "visualization"
 
 "data_type_description":
     "fastq":

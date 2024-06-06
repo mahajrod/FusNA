@@ -7,7 +7,7 @@ rule STAR:
         reverse_fastq=rules.cutadapt.output.reverse_fastq,
         genome_dir=lambda wildcards: reference_dict[wildcards.reference]["STAR_index"]
     output:
-        unsorted_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.unsorted.bam",
+        unsorted_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.bam",
     log:
         std=log_dir_path / "{sample}/STAR.{sample}.{reference}.log",
         cluster_log=cluster_log_dir_path / "{sample}/STAR.{sample}.{reference}.cluster.log",
@@ -15,7 +15,7 @@ rule STAR:
     benchmark:
         benchmark_dir_path / "{sample}/STAR.{sample}.{reference}.benchmark.txt"
     conda:
-        "../../../%s" % config["conda_config"]
+        "../../../%s" % config["arriba_config"]
     resources:
         cpus=config["threads"]["STAR"],
         time=config["time"]["STAR"],
