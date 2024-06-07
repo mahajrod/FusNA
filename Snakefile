@@ -15,8 +15,8 @@ log_dir_path = out_dir_path / config["log_dir"]
 error_dir_path  = out_dir_path / config["error_dir"]
 benchmark_dir_path =  out_dir_path / config["benchmark_dir"]
 cluster_log_dir_path = out_dir_path / config["cluster_log_dir"]
-resource_dir_path = config["resource_dir"]
-panel_dir_path = config["panel_dir"]
+resource_dir_path = Path(config["resource_dir"])
+panel_dir_path = Path(config["panel_dir"])
 #---- Parsing reference files ----
 reference_list = []
 tmp_reference_list = sorted(reference_dir_path.glob("*"))
