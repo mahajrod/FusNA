@@ -10,6 +10,8 @@
 
 #---- Input ----
 input_rna_dir: "input/RNA/"
+"resource_dir": "resources/"
+"panel_dir": "resources/panel/"
 "reference_dir": "resources/reference/"
 #----
 
@@ -43,6 +45,7 @@ cluster_log_dir: "cluster_logs"
   "sort_bam": 5
   "visualization" : 2
   "filter_arriba_output": 1
+  "classify_genes": 1
 #---- Tool memory ---- #TODO: adjust memory requirements
 "memory_mb":
   "merge_files": 1000
@@ -56,7 +59,7 @@ cluster_log_dir: "cluster_logs"
   "sort_bam_per_thread": 3000
   "visualization": 10000
   "filter_arriba_output": 500
-
+  "classify_genes": 500
 per_thread_sort_mem: 10 # memory in gigabytes
 
 #---- Tool time ----
@@ -72,6 +75,7 @@ time:
   "sort_bam": "02:00:00"
   "visualization": "02:00:00"
   "filter_arriba_output": "00:10:00"
+  "classify_genes": "00:10:00"
 #---- Tool variables ----
 
 "cutadapt":
@@ -90,11 +94,16 @@ time:
 "fusion_caller_list":
   - "arriba"
 
+"panel_list":
+    - "KAPA_HyperPETE_LC_Fusion_Panel"
+
 #---- Pipeline modes ----
 
 #"starting_point": "fastq"
 "pipeline_mode": "visualization" # Allowed: "qc", "filtering", "alignment", "fusion_call", "visualization"
+"panel": "KAPA_HyperPETE_LC_Fusion_Panel"
 
+#---- Data types ----
 "data_type_description":
     "fastq":
         "input":

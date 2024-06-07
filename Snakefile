@@ -15,7 +15,8 @@ log_dir_path = out_dir_path / config["log_dir"]
 error_dir_path  = out_dir_path / config["error_dir"]
 benchmark_dir_path =  out_dir_path / config["benchmark_dir"]
 cluster_log_dir_path = out_dir_path / config["cluster_log_dir"]
-
+resource_dir_path = config["resource_dir"]
+panel_dir_path = config["panel_dir"]
 #---- Parsing reference files ----
 reference_list = []
 tmp_reference_list = sorted(reference_dir_path.glob("*"))
@@ -325,24 +326,27 @@ if config["pipeline_mode"] in ["alignment", "fusion_call", "visualization"]:
                             reference=reference_list)]
 
 if config["pipeline_mode"] in ["fusion_call", "visualization"]:
-    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.filtered.tsv",
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.filtered.{gene_type}.tsv",
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
-                            fusion_caller=config["fusion_caller_list"]),
-                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.fusions.{filter}.labeled.tsv",
+                            fusion_caller=config["fusion_caller_list"],
+                            gene_type=["control", "target", "offtarget", "all_classified"]),
+                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.fusions.{filter}.{gene_type}.labeled.tsv",
                             aligner=["STAR"],
                             reference=reference_list,
                             fusion_caller=config["fusion_caller_list"],
-                            filter=["filtered", "filtered_out", "all_with_filters"])
+                            filter=["filtered", "filtered_out", "all_with_filters"],
+                            gene_type=["control", "target", "offtarget", "all_classified"])
                      ]
 if config["pipeline_mode"] in ["visualization"]:
-    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.{filter}.pdf",
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.pdf",
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
                             filter=["filtered", "filtered_out"],
-                            fusion_caller=config["fusion_caller_list"]),
+                            fusion_caller=config["fusion_caller_list"],
+                            gene_type=["control", "target", "offtarget"]),
                      ]
 
 #---- Final rule ----
