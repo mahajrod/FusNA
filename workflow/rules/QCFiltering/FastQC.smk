@@ -28,7 +28,7 @@ rule fastqc:
         #" mkdir -p {output.dir}; "
         " OUTDIR=`dirname {output.fastqc}`; "
         " fastqc --nogroup -k {params.kmer} -t {threads} -o ${{OUTDIR}} {input.fastq} 1>{log.std} 2>&1; "
-        " unzip {output.fastqc} -d {output.fastqc_dir} > {log.unzip_log} 2>&1; "
+        " unzip {output.fastqc} -d ${{OUTDIR}} > {log.unzip_log} 2>&1; "
         #" workflow/scripts/convert_fastqc_output.py -f {output.forward_fastqc} -r {output.reverse_fastqc} "
         #" -s {wildcards.library_id} -o {output.stats} 1>{log.stats} 2>&1 "
 
