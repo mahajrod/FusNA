@@ -11,7 +11,7 @@
 #---- Input ----
 input_rna_dir: "input/RNA/"
 "resource_dir": "resources/"
-"panel_dir": "resources/panel/"
+"panel_dir": "resources/panels/"
 "reference_dir": "resources/reference/"
 #----
 
