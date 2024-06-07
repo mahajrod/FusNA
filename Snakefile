@@ -325,21 +325,23 @@ if config["pipeline_mode"] in ["alignment", "fusion_call", "visualization"]:
                             reference=reference_list)]
 
 if config["pipeline_mode"] in ["fusion_call", "visualization"]:
-    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.labeled.tsv",
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.filtered.tsv",
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
                             fusion_caller=config["fusion_caller_list"]),
-                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.fusions.labeled.tsv",
+                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.fusions.{filter}.labeled.tsv",
                             aligner=["STAR"],
                             reference=reference_list,
-                            fusion_caller=config["fusion_caller_list"])
+                            fusion_caller=config["fusion_caller_list"],
+                            filter=["filtered", "filtered_out", "all_with_filters"])
                      ]
 if config["pipeline_mode"] in ["visualization"]:
-    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.pdf",
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.{filter}.pdf",
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
+                            filter=["filtered", "filtered_out"],
                             fusion_caller=config["fusion_caller_list"]),
                      ]
 

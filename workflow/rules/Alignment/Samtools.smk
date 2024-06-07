@@ -14,7 +14,8 @@ rule index_bam:
     resources:
         cpus=config["threads"]["samtools_index"] ,
         time=config["time"]["samtools_index"],
-        mem=config["memory_mb"]["samtools_index"]
+        mem=config["memory_mb"]["samtools_index"],
+        io=1
     threads: config["threads"]["samtools_index"]
     shell:
         " samtools index -@ {threads} {input} > {log.std} 2>&1; "
@@ -37,7 +38,8 @@ rule sort_bam:
     resources:
         cpus=config["threads"]["sort_bam"] ,
         time=config["time"]["sort_bam"],
-        mem=config["threads"]["sort_bam"] * config["memory_mb"]["sort_bam_per_thread"] + 500
+        mem=config["threads"]["sort_bam"] * config["memory_mb"]["sort_bam_per_thread"] + 500,
+        io=3
     threads: config["threads"]["sort_bam"]
     shell:
         " TMP_PREFIX=`basename {output.bam}`'.sort_tmp'; "
