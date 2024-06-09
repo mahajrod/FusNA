@@ -139,7 +139,7 @@ time:
 "pipeline_mode": "visualization" # Allowed: "qc", "filtering", "alignment", "fusion_call", "visualization"
 "panel": "KAPA_HyperPETE_LC_Fusion_Panel"
 "umi_handling_pipeline": "umi_tools" # Allowed: 'umi_tools'
-
+"sample_list": []
 #---- Data types ----
 "data_type_description":
     "fastq":
