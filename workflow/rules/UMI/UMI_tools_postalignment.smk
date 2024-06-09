@@ -5,7 +5,7 @@ rule umi_tools_dedup:
     priority: 1000
     output:
         rmdup_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.bam",
-        rmdup_stats=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.stats"
+        #rmdup_stats=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.stats"
     log:
         std=log_dir_path / "{sample}/umi_tools_dedup.{sample}.{reference}.log",
         err_log=log_dir_path / "{sample}/umi_tools_dedup.{sample}.{reference}.err.log",
@@ -21,5 +21,4 @@ rule umi_tools_dedup:
         mem=config["memory_mb"]["umi_tools_dedup"]
     threads: config["threads"]["umi_tools_dedup"]
     shell:
-        " umi_tools dedup --paired -I {input.sorted_bam} -S {output.rmdup_bam} -L {log.std} "
-        " --output-stats={output.rmdup_stats} > {log.err_log} 2>&1; "
+        " umi_tools dedup --paired -I {input.sorted_bam} -S {output.rmdup_bam} -L {log.std} > {log.err_log} 2>&1; "
