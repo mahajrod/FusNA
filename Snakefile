@@ -356,7 +356,7 @@ if config["pipeline_mode"] in ["visualization"]:
                             reference=reference_list,
                             filter=["filtered", "filtered_out"],
                             fusion_caller=config["fusion_caller_list"],
-                            stage=,
+                            stage=stage_list,
                             gene_type=["control", "target", "offtarget"]),
                      ]
 
