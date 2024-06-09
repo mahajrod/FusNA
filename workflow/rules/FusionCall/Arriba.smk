@@ -1,5 +1,13 @@
 localrules: add_sample_id
 
+def arriba_duplicate_handling_mode(wildcards):
+    if wildcards.stage == "sorted":
+        # at sorted stage no deduplication were done, so internal arriba's deduplication (enabled in arriba by default) is used
+        return ""
+    if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"]:
+        return " -u "
+    return ""
+
 rule arriba:
     input:
         bam=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.{stage}.bam",
@@ -9,7 +17,7 @@ rule arriba:
         known_fusions=lambda wildcards: reference_dict[wildcards.reference]["known_fusions"],
         protein_domains=lambda wildcards: reference_dict[wildcards.reference]["protein_domains"],
     params:
-        use_external_duplicate_flag=" -u " if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"] else ""
+        use_external_duplicate_flag=arriba_duplicate_handling_mode
     output:
         fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.tsv",
         fusions_discarded=out_dir_path/ "alignment/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.discarded.tsv"
