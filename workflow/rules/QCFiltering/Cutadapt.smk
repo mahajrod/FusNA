@@ -1,8 +1,10 @@
 
 rule cutadapt:
     input:
-        forward_fastq=rules.merge_files.output.forward_fastq,
-        reverse_fastq=rules.merge_files.output.reverse_fastq
+        forward_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
+                                                                          config["data_type_description"]["fastq"]["output"]["extension"])),
+        reverse_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
+                                                                          config["data_type_description"]["fastq"]["output"]["extension"])),
     output:
         forward_fastq=out_dir_path/ ("data/filtered/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
                                                                               config["data_type_description"]["fastq"]["output"]["extension"])),

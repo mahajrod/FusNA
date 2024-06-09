@@ -9,6 +9,9 @@ dependencies:
   #- bcl2fastq=2.19
   - fastqc>=0.11
   - cutadapt=3.4
+  - fastx_toolkit
+  #- fgbio
+  - umi_tools
   #- bwa=0.7.17
   #- bowtie2=2.4
   #- samtools>=1.10

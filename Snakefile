@@ -298,6 +298,13 @@ if not rna_index_presence:
 #----
 localrules: all
 
+stage_list = []
+if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"]:
+    # if UMI is present and handled
+    stage_list = config["umi_handling_pipeline_stage_list"][config["umi_handling_pipeline"]]
+else:
+    # if UMI is absent or ignored
+    stage_list = ["sorted"]
 
 results_list = []
 if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call", "visualization"]:
@@ -320,32 +327,36 @@ if config["pipeline_mode"] in ["filtering", "alignment", "fusion_call", "visuali
                      ]
 
 if config["pipeline_mode"] in ["alignment", "fusion_call", "visualization"]:
-    results_list += [expand(out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.sorted.bam.bai",
+    results_list += [expand(out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.{stage}.bam.bai",
                             sample=sample_list,
                             aligner=config["aligner_list"],
+                            stage=stage_list,
                             reference=reference_list)]
 
 if config["pipeline_mode"] in ["fusion_call", "visualization"]:
-    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.filtered.{gene_type}.tsv",
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.{stage}.fusions.filtered.{gene_type}.tsv",
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
                             fusion_caller=config["fusion_caller_list"],
+                            stage=stage_list,
                             gene_type=["control", "target", "offtarget", "all_classified"]),
-                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.fusions.{filter}.{gene_type}.labeled.tsv",
+                     expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/all_samples.{stage}.fusions.{filter}.{gene_type}.labeled.tsv",
                             aligner=["STAR"],
                             reference=reference_list,
                             fusion_caller=config["fusion_caller_list"],
                             filter=["filtered", "filtered_out", "all_with_filters"],
+                            stage=stage_list,
                             gene_type=["control", "target", "offtarget", "all_classified"])
                      ]
 if config["pipeline_mode"] in ["visualization"]:
-    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.pdf",
+    results_list += [expand(out_dir_path/ "fusion_call/{aligner}..{fusion_caller}/{reference}/{sample}/{sample}.{stage}.fusions.{filter}.{gene_type}.pdf",
                             sample=sample_list,
                             aligner=["STAR"],
                             reference=reference_list,
                             filter=["filtered", "filtered_out"],
                             fusion_caller=config["fusion_caller_list"],
+                            stage=,
                             gene_type=["control", "target", "offtarget"]),
                      ]
 
@@ -360,3 +371,10 @@ include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/Alignment/STAR.smk"
 include: "workflow/rules/Alignment/Samtools.smk"
 include: "workflow/rules/FusionCall/Arriba.smk"
+
+if config["panel_parameters"][config["panel"]]["UMI"] and (not config["panel_parameters"][config["panel"]]["use_UMI"]):
+    if config["panel_parameters"][config["panel"]]["UMI_type"] == "duplex":
+        if config["umi_handling_pipeline"] == "umi_tools":
+            include: "workflow/rules/UMI/UMI_tools.smk"
+        #include: "workflow/rules/UMI/UMI_duplex.smk"
+        #include: "workflow/rules/UMI/UMI_duplex_post_alignment.smk"

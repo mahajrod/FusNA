@@ -2,21 +2,21 @@ localrules: add_sample_id
 
 rule arriba:
     input:
-        bam=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.bam",
+        bam=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.{stage}.bam",
         reference_fasta=lambda wildcards: reference_dict[wildcards.reference]["fasta"],
         reference_annotation=lambda wildcards: reference_dict[wildcards.reference]["annotation"],
         blacklist=lambda wildcards: reference_dict[wildcards.reference]["blacklist"],
         known_fusions=lambda wildcards: reference_dict[wildcards.reference]["known_fusions"],
         protein_domains=lambda wildcards: reference_dict[wildcards.reference]["protein_domains"],
     output:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.tsv",
-        fusions_discarded=out_dir_path/ "alignment/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.discarded.tsv"
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.tsv",
+        fusions_discarded=out_dir_path/ "alignment/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.discarded.tsv"
     log:
-        std=log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.log",
-        cluster_log=cluster_log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.cluster.err"
+        std=log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.{stage}.log",
+        cluster_log=cluster_log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.{stage}.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.{stage}.cluster.err"
     benchmark:
-        benchmark_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.benchmark.txt"
+        benchmark_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.{stage}.benchmark.txt"
     conda:
         "../../../%s" % config["arriba_config"]
     resources:
@@ -34,22 +34,22 @@ rule arriba:
 
 rule filter_arriba_output:
     input:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.tsv"
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.tsv"
     output:
-        filtered_fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.filtered.tsv",
-        filtered_out_fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.filtered_out.tsv",
-        all_with_filters_fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.all_with_filters.tsv",
+        filtered_fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.filtered.tsv",
+        filtered_out_fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.filtered_out.tsv",
+        all_with_filters_fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.all_with_filters.tsv",
     params:
         min_coverage=config["filter_arriba_output"]["min_coverage"],
         min_non_zero_sup_cov=config["filter_arriba_output"]["min_non_zero_sup_cov"],
         coverage_ratio_threshold=config["filter_arriba_output"]["coverage_ratio_threshold"],
         min_supporting_ratios_above_threshold=config["filter_arriba_output"]["min_supporting_ratios_above_threshold"]
     log:
-        std=log_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.log",
-        cluster_log=cluster_log_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.cluster.err"
+        std=log_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.{stage}.log",
+        cluster_log=cluster_log_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.{stage}.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.{stage}.cluster.err"
     benchmark:
-        benchmark_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.benchmark.txt"
+        benchmark_dir_path / "{sample}/filter_arriba_output.{sample}.{aligner}.{reference}.{stage}.benchmark.txt"
     conda:
         "../../../%s" % config["arriba_config"]
     resources:
@@ -67,21 +67,21 @@ rule filter_arriba_output:
 
 rule classify_genes:
     input:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filtering}.tsv"
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filtering}.tsv"
     output:
-        control_genes=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filtering}.control.tsv",
-        target_genes=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filtering}.target.tsv",
-        offtarget_genes=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filtering}.offtarget.tsv",
-        all_genes_classified=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filtering}.all_classified.tsv",
+        control_genes=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filtering}.control.tsv",
+        target_genes=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filtering}.target.tsv",
+        offtarget_genes=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filtering}.offtarget.tsv",
+        all_genes_classified=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filtering}.all_classified.tsv",
     params:
         control_gene_file=panel_dir_path / config["panel"] / "control_genes.ids",
         target_gene_file=panel_dir_path / config["panel"] / "target_genes.ids",
     log:
-        std=log_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.log",
-        cluster_log=cluster_log_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.cluster.err"
+        std=log_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.{stage}.log",
+        cluster_log=cluster_log_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.{stage}.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.{stage}.cluster.err"
     benchmark:
-        benchmark_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.benchmark.txt"
+        benchmark_dir_path / "{sample}/classify_genes.{sample}.{aligner}.{reference}.{filtering}.{stage}.benchmark.txt"
     conda:
         "../../../%s" % config["arriba_config"]
     resources:
@@ -99,20 +99,20 @@ rule classify_genes:
 
 rule visualization:
     input:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.tsv",
-        sorted_bam=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.sorted.bam",
-        sorted_bam_index=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.sorted.bam.bai",
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filter}.{gene_type}.tsv",
+        sorted_bam=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.{stage}.bam",
+        sorted_bam_index=out_dir_path/ "alignment/{aligner}/{reference}/{sample}/{sample}.{stage}.bam.bai",
         cytobands=lambda wildcards: reference_dict[wildcards.reference]["cytobands"],
         reference_annotation=lambda wildcards: reference_dict[wildcards.reference]["annotation"],
         protein_domains=lambda wildcards: reference_dict[wildcards.reference]["protein_domains"],
     output:
-        fusions_pdf=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.pdf",
+        fusions_pdf=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filter}.{gene_type}.pdf",
     log:
-        std=log_dir_path / "{sample}/visualization.{sample}.{aligner}.{reference}.{filter}.{gene_type}.log",
-        cluster_log=cluster_log_dir_path / "{sample}/avisualization.{sample}.{aligner}.{reference}.{filter}.{gene_type}.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/visualization.{sample}.{aligner}.{reference}.{filter}.{gene_type}.cluster.err"
+        std=log_dir_path / "{sample}/visualization.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.log",
+        cluster_log=cluster_log_dir_path / "{sample}/avisualization.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/visualization.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.cluster.err"
     benchmark:
-        benchmark_dir_path / "{sample}/visualization.{sample}.{aligner}.{reference}.{filter}.{gene_type}.benchmark.txt"
+        benchmark_dir_path / "{sample}/visualization.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.benchmark.txt"
     conda:
         "../../../%s" % config["arriba_config"]
     resources:
@@ -131,15 +131,15 @@ rule visualization:
 
 rule add_sample_id:
     input:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.tsv",
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filter}.{gene_type}.tsv",
     output:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.labeled.tsv",
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filter}.{gene_type}.labeled.tsv",
     log:
-        std=log_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{filter}.{gene_type}.log",
-        cluster_log=cluster_log_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{filter}.{gene_type}.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{filter}.{gene_type}.cluster.err"
+        std=log_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.log",
+        cluster_log=cluster_log_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.cluster.err"
     benchmark:
-        benchmark_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{filter}.{gene_type}.benchmark.txt"
+        benchmark_dir_path / "{sample}/add_sample_id.{sample}.{aligner}.{reference}.{stage}.{filter}.{gene_type}.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -155,16 +155,16 @@ rule add_sample_id:
 
 rule combine_arriba_fusion_files:
     input:
-        fusions=expand(out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.fusions.{filter}.{gene_type}.labeled.tsv",
+        fusions=expand(out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.{filter}.{gene_type}.labeled.tsv",
                        sample=sample_list, allow_missing=True),
     output:
-        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/all_samples.fusions.{filter}.{gene_type}.labeled.tsv",
+        fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/all_samples.{stage}.fusions.{filter}.{gene_type}.labeled.tsv",
     log:
-        std=log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{filter}.{gene_type}.log",
-        cluster_log=cluster_log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{filter}.{gene_type}.cluster.log",
-        cluster_err=cluster_log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{filter}.{gene_type}.cluster.err"
+        std=log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{stage}.{filter}.{gene_type}.log",
+        cluster_log=cluster_log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{stage}.{filter}.{gene_type}.cluster.log",
+        cluster_err=cluster_log_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{stage}.{filter}.{gene_type}.cluster.err"
     benchmark:
-        benchmark_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{filter}.{gene_type}.benchmark.txt"
+        benchmark_dir_path / "combine_arriba_fusion_files.{aligner}.{reference}.{stage}.{filter}.{gene_type}.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
