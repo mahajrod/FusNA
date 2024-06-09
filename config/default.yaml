@@ -51,8 +51,8 @@ cluster_log_dir: "cluster_logs"
   "extract_umis_from_bam": 2
   "sort": 2
   "fixmate": 1
-  "umi_tools_extract_umi": 10
-  "umi_tools_dedup": 5
+  "umi_tools_extract_umi": 1
+  "umi_tools_dedup": 1
 #---- Tool memory ---- #TODO: adjust memory requirements
 "memory_mb":
   "merge_files": 1000
