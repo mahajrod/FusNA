@@ -7,9 +7,9 @@ if config["panel_parameters"][config["panel"]]["UMI"] and (not config["panel_par
             forward_fastqs=lambda wildcards: sample_dict[wildcards.sample]["input_files"][::2],
             reverse_fastqs=lambda wildcards: sample_dict[wildcards.sample]["input_files"][1::2]
         output:
-            forward_fastq=out_dir_path/ ("data/merged_raw/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
+            forward_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
                                                                           config["data_type_description"]["fastq"]["output"]["extension"])),
-            reverse_fastq=out_dir_path/ ("data/merged_raw/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
+            reverse_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
                                                                           config["data_type_description"]["fastq"]["output"]["extension"])),
             #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fastqc.stats"
         params:
@@ -44,10 +44,12 @@ else:
             forward_fastqs=lambda wildcards: sample_dict[wildcards.sample]["input_files"][::2],
             reverse_fastqs=lambda wildcards: sample_dict[wildcards.sample]["input_files"][1::2]
         output:
-            forward_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
-                                                                          config["data_type_description"]["fastq"]["output"]["extension"])),
-            reverse_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
-                                                                          config["data_type_description"]["fastq"]["output"]["extension"])),
+            forward_fastq=out_dir_path/ ("data/%s/{sample}/{sample}%s%s" % ("trimmed" if not config["panel_parameters"][config["panel"]]["UMI"] else "merged_raw",
+                                                                            config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
+                                                                            config["data_type_description"]["fastq"]["output"]["extension"])),
+            reverse_fastq=out_dir_path/ ("data/%s/{sample}/{sample}%s%s" % ("trimmed" if not config["panel_parameters"][config["panel"]]["UMI"] else "merged_raw",
+                                                                            config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"],
+                                                                            config["data_type_description"]["fastq"]["output"]["extension"])),
             #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fastqc.stats"
         log:
             std=log_dir_path / "{sample}/merge_files.{sample}.log",

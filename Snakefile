@@ -301,12 +301,16 @@ localrules: all
 stage_list = []
 qc_stage_list = []
 initial_qc_stage_list = []
-if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"]:
-    # if UMI is present and handled
-    initial_qc_stage_list = ["merged_raw"]
-    qc_stage_list = ["trimmed", "filtered"]
-    stage_list = config["umi_handling_pipeline_stage_list"][config["umi_handling_pipeline"]]
-
+if config["panel_parameters"][config["panel"]]["UMI"]:
+    if config["panel_parameters"][config["panel"]]["use_UMI"]:
+        # if UMI is present and handled
+        initial_qc_stage_list = ["merged_raw"]
+        qc_stage_list = ["trimmed", "filtered"]
+        stage_list = config["umi_handling_pipeline_stage_list"][config["umi_handling_pipeline"]]
+    else:
+        initial_qc_stage_list = ["trimmed"]
+        qc_stage_list = ["filtered"]
+        stage_list = ["sorted"]
 else:
     # if UMI is absent or ignored
     initial_qc_stage_list = ["trimmed"]
@@ -382,8 +386,8 @@ include: "workflow/rules/Alignment/Samtools.smk"
 include: "workflow/rules/FusionCall/Arriba.smk"
 
 if config["panel_parameters"][config["panel"]]["UMI"] and (not config["panel_parameters"][config["panel"]]["use_UMI"]):
-    if config["panel_parameters"][config["panel"]]["UMI_type"] == "duplex":
-        if config["umi_handling_pipeline"] == "umi_tools":
-            include: "workflow/rules/UMI/UMI_tools.smk"
+    #if config["panel_parameters"][config["panel"]]["UMI_type"] == "duplex":
+    if config["umi_handling_pipeline"] == "umi_tools":
+        include: "workflow/rules/UMI/UMI_tools.smk"
         #include: "workflow/rules/UMI/UMI_duplex.smk"
         #include: "workflow/rules/UMI/UMI_duplex_post_alignment.smk"
