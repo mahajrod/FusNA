@@ -8,6 +8,8 @@ rule arriba:
         blacklist=lambda wildcards: reference_dict[wildcards.reference]["blacklist"],
         known_fusions=lambda wildcards: reference_dict[wildcards.reference]["known_fusions"],
         protein_domains=lambda wildcards: reference_dict[wildcards.reference]["protein_domains"],
+    params:
+        use_external_duplicate_flag=" -u " if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"] else ""
     output:
         fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.tsv",
         fusions_discarded=out_dir_path/ "alignment/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.discarded.tsv"
@@ -27,7 +29,8 @@ rule arriba:
     threads:
         config["threads"]["arriba"]
     shell:
-        " arriba -x {input.bam} -o {output.fusions} -O {output.fusions_discarded} "
+        " arriba {params.use_external_duplicate_flag} "
+        " -x {input.bam} -o {output.fusions} -O {output.fusions_discarded} "
         " -a {input.reference_fasta} -g {input.reference_annotation} "
         " -b {input.blacklist} -k {input.known_fusions} -t {input.known_fusions} "
         " -p {input.protein_domains} > {log.std} 2>&1; "
