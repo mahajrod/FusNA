@@ -321,7 +321,7 @@ else:
     qc_stage_list = ["filtered"]
     stage_list = ["sorted"]
 
-
+print(stage_list)
 
 results_list = []
 if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call", "visualization"]:
