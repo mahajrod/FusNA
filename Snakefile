@@ -299,18 +299,27 @@ if not rna_index_presence:
 localrules: all
 
 stage_list = []
+qc_stage_list = []
+initial_qc_stage_list = []
 if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"]:
     # if UMI is present and handled
+    initial_qc_stage_list = ["merged_raw"]
+    qc_stage_list = ["trimmed", "filtered"]
     stage_list = config["umi_handling_pipeline_stage_list"][config["umi_handling_pipeline"]]
+
 else:
     # if UMI is absent or ignored
+    initial_qc_stage_list = ["trimmed"]
+    qc_stage_list = ["filtered"]
     stage_list = ["sorted"]
+
+
 
 results_list = []
 if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call", "visualization"]:
 
-    results_list += [expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
-                            stage=["merged_raw"],
+    results_list += [expand(out_dir_path/ "qc/fastqc/{qc_stage}/{sample}/{sample}{suffix}_fastqc.zip",
+                            qc_stage=initial_qc_stage_list,
                             sample=sample_list,
                             suffix=[config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]]),
@@ -319,8 +328,8 @@ if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call", "v
 if config["pipeline_mode"] in ["filtering", "alignment", "fusion_call", "visualization"]:
     results_list += [expand(out_dir_path/ "data/filtered/{sample}/{sample}.stats",
                             sample=sample_list),
-                     expand(out_dir_path/ "qc/fastqc/{stage}/{sample}/{sample}{suffix}_fastqc.zip",
-                            stage=["filtered"],
+                     expand(out_dir_path/ "qc/fastqc/{qc_stage}/{sample}/{sample}{suffix}_fastqc.zip",
+                            qc_stage=qc_stage_list,
                             sample=sample_list,
                             suffix=[config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
                                     config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"]])

@@ -2,19 +2,19 @@
 
 rule fastqc:
     input:
-        fastq=out_dir_path/ ("data/{stage}/{sample}/{fastq_prefix}%s" % config["data_type_description"]["fastq"]["output"]["extension"]),
+        fastq=out_dir_path/ ("data/{qc_stage}/{sample}/{fastq_prefix}%s" % config["data_type_description"]["fastq"]["output"]["extension"]),
     output:
-        fastqc=out_dir_path/ "qc/fastqc/{stage}/{sample}/{fastq_prefix}_fastqc.zip",
-        fastqc_dir=directory(out_dir_path/ "qc/fastqc/{stage}/{sample}/{fastq_prefix}_fastqc")
+        fastqc=out_dir_path/ "qc/fastqc/{qc_stage}/{sample}/{fastq_prefix}_fastqc.zip",
+        fastqc_dir=directory(out_dir_path/ "qc/fastqc/{qc_stage}/{sample}/{fastq_prefix}_fastqc")
     params:
         kmer=config["fastqc"]["kmer_length"],
     log:
-        std=log_dir_path / "{sample}/fastqc.{stage}.{sample}.{fastq_prefix}.log",
-        unzip_log=log_dir_path / "{sample}/fastqc.{stage}.{sample}.{fastq_prefix}.unzip.log",
-        cluster_log=cluster_log_dir_path / "{sample}/fastqc.{stage}.{sample}.{fastq_prefix}.log",
-        cluster_err=cluster_log_dir_path / "{sample}/fastqc.{stage}.{sample}.{fastq_prefix}.err"
+        std=log_dir_path / "{sample}/fastqc.{qc_stage}.{sample}.{fastq_prefix}.log",
+        unzip_log=log_dir_path / "{sample}/fastqc.{qc_stage}.{sample}.{fastq_prefix}.unzip.log",
+        cluster_log=cluster_log_dir_path / "{sample}/fastqc.{qc_stage}.{sample}.{fastq_prefix}.log",
+        cluster_err=cluster_log_dir_path / "{sample}/fastqc.{qc_stage}.{sample}.{fastq_prefix}.err"
     benchmark:
-        benchmark_dir_path / "{sample}/fastqc.{stage}.{sample}.{fastq_prefix}.benchmark.txt"
+        benchmark_dir_path / "{sample}/fastqc.{qc_stage}.{sample}.{fastq_prefix}.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
