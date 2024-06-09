@@ -11,7 +11,7 @@ dependencies:
   - cutadapt=3.4
   - fastx_toolkit
   #- fgbio
-  - umi_tools
+  - umi_tools==1.1
   #- bwa=0.7.17
   #- bowtie2=2.4
   #- samtools>=1.10
