@@ -389,5 +389,6 @@ if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_paramete
     #if config["panel_parameters"][config["panel"]]["UMI_type"] == "duplex":
     if config["umi_handling_pipeline"] == "umi_tools":
         include: "workflow/rules/UMI/UMI_tools.smk"
+        include: "workflow/rules/UMI/UMI_tools_postalignment.smk"
         #include: "workflow/rules/UMI/UMI_duplex.smk"
         #include: "workflow/rules/UMI/UMI_duplex_post_alignment.smk"
