@@ -72,7 +72,11 @@ print(reference_dict)
 #----
 
 #---- Parsing samples ----
-sample_list = [element.name for element in input_rna_dir_path.glob("*")]
+
+if config["sample_list"]:
+    sample_list = config["sample_list"]
+else:
+    sample_list = [element.name for element in input_rna_dir_path.glob("*")]
 
 sample_dict = {}
 for sample in sample_list:
