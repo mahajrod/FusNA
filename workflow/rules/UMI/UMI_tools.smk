@@ -6,9 +6,9 @@ rule umi_tools_extract_umi:
                                                                           config["data_type_description"]["fastq"]["output"]["extension"])),
     priority: 1000
     params:
-        forward_read_regex="'(?P<umi_1>.{{%s}})(?P<discard_1>.{{%s}}).*'" % (config["panel_parameters"][config["panel"]]["forward_barcode_length"],
+        forward_read_regex=lambda wildcards: "'(?P<umi_1>.{{%s}})(?P<discard_1>.{{%s}}).*'" % (config["panel_parameters"][config["panel"]]["forward_barcode_length"],
                                                                              config["panel_parameters"][config["panel"]]["forward_linker_length"],),
-        reverse_read_regex="'(?P<umi_2>.{{%s}})(?P<discard_2>.{{%s}}).*'" % (config["panel_parameters"][config["panel"]]["reverse_barcode_length"],
+        reverse_read_regex=lambda wildcards: "'(?P<umi_2>.{{%s}})(?P<discard_2>.{{%s}}).*'" % (config["panel_parameters"][config["panel"]]["reverse_barcode_length"],
                                                                              config["panel_parameters"][config["panel"]]["reverse_linker_length"],),
     output:
         forward_fastq=out_dir_path/ ("data/trimmed/{sample}/{sample}%s%s" % (config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"],
