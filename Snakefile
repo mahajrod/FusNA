@@ -385,7 +385,7 @@ include: "workflow/rules/Alignment/STAR.smk"
 include: "workflow/rules/Alignment/Samtools.smk"
 include: "workflow/rules/FusionCall/Arriba.smk"
 
-if config["panel_parameters"][config["panel"]]["UMI"] and (not config["panel_parameters"][config["panel"]]["use_UMI"]):
+if config["panel_parameters"][config["panel"]]["UMI"] and config["panel_parameters"][config["panel"]]["use_UMI"]:
     #if config["panel_parameters"][config["panel"]]["UMI_type"] == "duplex":
     if config["umi_handling_pipeline"] == "umi_tools":
         include: "workflow/rules/UMI/UMI_tools.smk"
