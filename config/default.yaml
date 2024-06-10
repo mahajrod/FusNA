@@ -38,7 +38,7 @@ cluster_log_dir: "cluster_logs"
   "fastqc": 1
   "cutadapt": 5
   "STAR": 5
-  "arriba": 4
+  "arriba": 1
   "add_sample_id": 1
   "combine_arriba_fusion_files": 1
   "samtools_index": 2

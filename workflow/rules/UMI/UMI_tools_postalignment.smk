@@ -20,5 +20,13 @@ rule umi_tools_dedup:
         time=config["time"]["umi_tools_dedup"],
         mem=config["memory_mb"]["umi_tools_dedup"]
     threads: config["threads"]["umi_tools_dedup"]
-    shell:
-        " umi_tools dedup --paired -I {input.sorted_bam} -S {output.rmdup_bam} -L {log.std} > {log.err_log} 2>&1; "
+    shell: # there are issues with output stats. It is not reported if a long filename is used
+        " DIR=`dirname {output.rmdup_bam}`; "
+        " SORTED_BAM=`realpath {input.sorted_bam}`; "
+        " OUTPUT_BAM=`realpath {output.rmdup_bam}`; "
+        " LOG=`realpath {log.std}`; "
+        " ERR_LOG=`realpath {log.err_log}`; "
+        " cd ${{DIR}}; "
+        " umi_tools dedup --unmapped-reads use --buffer-whole-contig "
+        " --paired -I ${{SORTED_BAM}} -S ${{OUTPUT_BAM}} -L ${{LOG}} "
+        " --output-stats=deduplicated   > ${{ERR_LOG}} 2>&1; "
