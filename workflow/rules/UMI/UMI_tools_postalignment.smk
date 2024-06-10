@@ -5,8 +5,8 @@ rule umi_tools_dedup:
     priority: 1000
     params:
         method=config["umi_tools_dedup"]["method"],
-        spliced_is_unique= " --spliced-is-unique " if config["umi_tools_dedup"]["method"]["spliced_is_unique"] else "",
-        read_length= " --read-length " if config["umi_tools_dedup"]["method"]["use_read_length"] else "",
+        spliced_is_unique= " --spliced-is-unique " if config["umi_tools_dedup"]["spliced_is_unique"] else "",
+        read_length= " --read-length " if config["umi_tools_dedup"]["use_read_length"] else "",
     output:
         rmdup_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.bam",
         #rmdup_stats=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.stats"
