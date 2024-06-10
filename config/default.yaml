@@ -113,6 +113,8 @@ time:
   - "arriba"
 "umi_tools_dedup":
     "method": "unique"
+    "spliced_is_unique": True
+    "use_read_length": True
 #----
 
 "panel_parameters":
