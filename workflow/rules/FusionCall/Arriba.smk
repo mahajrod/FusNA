@@ -20,7 +20,7 @@ rule arriba:
         use_external_duplicate_flag=arriba_duplicate_handling_mode
     output:
         fusions=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.tsv",
-        fusions_discarded=out_dir_path/ "alignment/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.discarded.tsv"
+        fusions_discarded=out_dir_path/ "fusion_call/{aligner}..arriba/{reference}/{sample}/{sample}.{stage}.fusions.discarded.tsv"
     log:
         std=log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.{stage}.log",
         cluster_log=cluster_log_dir_path / "{sample}/arriba.{sample}.{aligner}.{reference}.{stage}.cluster.log",
