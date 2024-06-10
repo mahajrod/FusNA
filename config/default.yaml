@@ -72,7 +72,7 @@ cluster_log_dir: "cluster_logs"
   "extract_umis_from_bam": 5000
   "picard": 1
   "umi_tools_extract_umi": 3000
-  "umi_tools_dedup": 5000
+  "umi_tools_dedup": 14000
 per_thread_sort_mem: 10 # memory in gigabytes
 
 #---- Tool time ----
@@ -111,7 +111,8 @@ time:
   - "STAR"
 "fusion_caller_list":
   - "arriba"
-
+"umi_tools_dedup":
+    "method": "unique"
 #----
 
 "panel_parameters":

@@ -3,6 +3,8 @@ rule umi_tools_dedup:
         sorted_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.sorted.bam",
         sorted_bam_bai=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.sorted.bam.bai",
     priority: 1000
+    params:
+        method=config["umi_tools_dedup"]["method"]
     output:
         rmdup_bam=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.bam",
         #rmdup_stats=out_dir_path/ "alignment/STAR/{reference}/{sample}/{sample}.rmdup.stats"
@@ -27,6 +29,6 @@ rule umi_tools_dedup:
         " LOG=`realpath {log.std}`; "
         " ERR_LOG=`realpath {log.err_log}`; "
         " cd ${{DIR}}; "
-        " umi_tools dedup --unmapped-reads use --buffer-whole-contig "
+        " umi_tools dedup --method {params.method} --unmapped-reads use --buffer-whole-contig "
         " --paired -I ${{SORTED_BAM}} -S ${{OUTPUT_BAM}} -L ${{LOG}} "
         " --output-stats=deduplicated   > ${{ERR_LOG}} 2>&1; "
