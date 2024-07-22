@@ -325,9 +325,7 @@ print(stage_list)
 
 results_list = []
 if config["pipeline_mode"] in ["qc", "filtering", "alignment", "fusion_call", "visualization"]:
-    print("AAAAAAAAAAA")
-    print(config["data_type_description"]["fastq"]["output"]["suffix_list"]["forward"])
-    print(config["data_type_description"]["fastq"]["output"]["suffix_list"]["reverse"])
+
     results_list += [expand(out_dir_path/ "qc/fastqc/{qc_stage}/{sample}/{sample}{suffix}_fastqc.zip",
                             qc_stage=initial_qc_stage_list,
                             sample=sample_list,
